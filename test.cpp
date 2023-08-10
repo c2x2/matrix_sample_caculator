@@ -10,6 +10,8 @@ public:
     friend istream& operator>>(istream &in,matrix &m);// 重载>>运算符;
     matrix& operator+(const matrix &m2);//重载加法
     matrix& operator-(const matrix &m2);//重載减法
+    matrix& operator*(const matrix &m2);//重载乘法
+    matrix& operator/(const matrix &m2);//重載除法
     matrix &operator=(const matrix &m2); // 重载=
     ~matrix(){};
 }; // 定义矩阵类
@@ -64,6 +66,26 @@ matrix& matrix::operator-(const matrix &m2){
     }
     return *this;
 }
+//定义*函数
+matrix& matrix::operator*(const matrix &m2){
+    matrix m3(m,n);
+    m3 = *this;
+    delete[] this->p;
+    n=m2.n;
+    p=new int*[m];
+    for (int i = 0; i < m;i++){
+        p[i] = new int[n];
+    }
+    for (int i = 0; i < m;i++){
+        for (int j = 0;j<n;j++){
+            p[i][j]=0;
+            for(int k = 0;k<m2.m;k++){
+                p[i][j]+=m3.p[i][k]*m2.p[k][j];
+            }
+        }
+    }
+    return *this;
+}
 //定义=函数
 matrix& matrix::operator=(const matrix &m2){
     if(this==&m2){
@@ -93,6 +115,7 @@ int main(){
     cin>>m;
     matrix m2(3,3);
     cin>>m2;    
-    (m+m2).print();
+    // (m+m2).print();
+    (m * m2).print();
     return 0;
 }
