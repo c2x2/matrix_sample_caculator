@@ -11,33 +11,115 @@ public:
     matrix& operator+(const matrix &m2);//重载加法
     matrix& operator-(const matrix &m2);//重載减法
     matrix& operator*(const matrix &m2);//重载乘法
-    matrix &operator*(const int &k);//重載除法
+    matrix &operator*(const int &k);//重载数乘
     matrix transpose();//转置
+    matrix inverse();//求逆
     matrix &operator=(const matrix &m2); // 重载=
     int det();//求行列式
+    int getm();
+    int getn();
     int operator()(int i,int j);//访问元素
-    ~matrix() { delete[] p; };
-}; // 定义矩阵类
-matrix::matrix(int m,int n){
-    this->m=m;
-    this->n=n;
-    p=new int*[m];
-    for(int i=0;i<m;i++){
-        p[i]=new int[n];
-        for(int j=0;j<n;j++){
-            p[i][j]=0;
+    ~matrix() {};
+};
+int matrix::getm(){
+    return this->m;
+}
+int matrix::getn(){
+    return this->n;
+}  
+// 定义矩阵类
+matrix::matrix(int m, int n)
+{
+    this->m = m;
+    this->n = n;
+    p = new int *[m];
+    for (int i = 0; i < m; i++)
+    {
+        p[i] = new int[n];
+        for (int j = 0; j < n; j++)
+        {
+            p[i][j] = 0;
         }
     }
-}//构造函数
-//定义访问元素函数
-int matrix::operator()(int i,int j){
+} // 构造函数
+// 定义访问元素函数
+int matrix::operator()(int i, int j)
+{
     return this->p[i][j];
 }
-int pan(int x){
-    if(x%2==0){
+int pan(int x)
+{
+    if (x % 2 == 0)
+    {
         return 1;
-    }else{
+    }
+    else
+    {
         return -1;
+    }
+}
+void inves(matrix mat){
+    if(mat.getm()!=mat.getn()||mat.det()==0){
+        cout << "error:The matrix is not inverse." << endl;
+        return;
+    }
+    double **inve;
+    inve = new double*[mat.getm()];
+    for (int i = 0;i<mat.getm();i++){
+        inve[i] = new double[mat.getn()];
+    }
+    for (int i = 0;i<mat.getm();i++){
+        for (int j = 0; j < mat.getn();j++){
+            inve[i][j] = double(mat.inverse()(i, j))/double(mat.det());
+            cout<<inve[i][j]<<" ";
+        }
+        cout << endl;
+    }
+}
+// 定义求逆函数
+matrix matrix::inverse()
+{
+    int det=this->det();
+    if (this->det() == 0 || m != n)
+    {
+        matrix tem(1, 1);
+        tem.p[0][0] = 2147483647;
+        return tem;
+    }
+    else
+    {
+        matrix inv(m, n);
+        for (int t = 0; t < m; t++)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                matrix m2(m - 1, n - 1);
+                for (int j = 0; j < m; j++)
+                {
+                    for (int k = 0; k < n; k++)
+                    {
+                        if (k < i && j < t)
+                        {
+                            m2.p[j][k] = p[j][k];
+                        }
+                        if (k < i && j > t)
+                        {
+                            m2.p[j - 1][k] = p[j][k];
+                        }
+                        if (k > i && j < t)
+                        {
+                            m2.p[j][k - 1] = p[j][k];
+                        }
+                        if (k > i && j > t)
+                        {
+                            m2.p[j - 1][k - 1] = p[j][k];
+                        }
+                    }
+                }
+                inv.p[t][i] = pan(t) * pan(i) * m2.det();
+            }
+        }
+        return inv.transpose();
     }
 }
 //定义行列式函数
@@ -170,8 +252,9 @@ matrix matrix::transpose(){
     return m3;
 }
 int main(){
-    matrix m(3,3);
+    matrix m(2,2);
     cin>>m;
     cout<<m.det()<<endl;
+    inves(m);
     return 0;
 }
