@@ -11,9 +11,12 @@ public:
     matrix& operator+(const matrix &m2);//重载加法
     matrix& operator-(const matrix &m2);//重載减法
     matrix& operator*(const matrix &m2);//重载乘法
-    matrix& operator/(const matrix &m2);//重載除法
+    matrix &operator*(const int &k);//重載除法
+    matrix transpose();//转置
     matrix &operator=(const matrix &m2); // 重载=
-    ~matrix(){};
+    int det();//求行列式
+    int operator()(int i,int j);//访问元素
+    ~matrix() { delete[] p; };
 }; // 定义矩阵类
 matrix::matrix(int m,int n){
     this->m=m;
@@ -26,6 +29,43 @@ matrix::matrix(int m,int n){
         }
     }
 }//构造函数
+//定义访问元素函数
+int matrix::operator()(int i,int j){
+    return this->p[i][j];
+}
+int pan(int x){
+    if(x%2==0){
+        return 1;
+    }else{
+        return -1;
+    }
+}
+//定义行列式函数
+int matrix::det(){
+    if(m!=n){
+        return 2147483647;
+    }else{
+        if(m==1&&n==1){
+            return p[0][0];
+        }
+        int det = 0;
+        for(int i=0;i<n;i++){
+            matrix m2(m-1,n-1);
+            for (int j = 0; j <  m - 1 ; j++){
+                for(int k = 0; k< n ; k++){
+                    if(k<i){
+                        m2.p[j][k]=p[j+1][k];
+                    }
+                    if(k>i){
+                        m2.p[j][k-1]=p[j+1][k];
+                    }
+                }
+            }
+            det+=pan(i)*p[0][i]*m2.det();
+        }
+        return det;
+    }
+}
 //定义print函数
 void matrix::print(){
     for (int i = 0;i<m;i++){
@@ -86,6 +126,15 @@ matrix& matrix::operator*(const matrix &m2){
     }
     return *this;
 }
+//定义数乘
+matrix& matrix::operator*(const int &k){
+    for (int i = 0; i < m;i++){
+        for (int j = 0; j < n;j++){
+            p[i][j] = p[i][j] * k;
+        }
+    }
+    return *this;
+}
 //定义=函数
 matrix& matrix::operator=(const matrix &m2){
     if(this==&m2){
@@ -110,12 +159,19 @@ matrix& matrix::operator=(const matrix &m2){
     }
     return *this;
 }
+//定义转置
+matrix matrix::transpose(){
+    matrix m3(this->n,this->m);
+    for (int i = 0; i < n;i++){
+        for (int j = 0; j < m;j++){
+            m3.p[i][j] = this->p[j][i];
+        }
+    }
+    return m3;
+}
 int main(){
     matrix m(3,3);
     cin>>m;
-    matrix m2(3,3);
-    cin>>m2;    
-    // (m+m2).print();
-    (m * m2).print();
+    cout<<m.det()<<endl;
     return 0;
 }
