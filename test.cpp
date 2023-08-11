@@ -3,11 +3,11 @@ using namespace std;
 class matrix{
 private:
     int m,n;
-    int **p;
+    double **p;
 public:
     matrix(int m,int n);
-    void print();
     friend istream& operator>>(istream &in,matrix &m);// 重载>>运算符;
+    friend ostream& operator<<(ostream &out,matrix m);//重载<<运算符
     matrix& operator+(const matrix &m2);//重载加法
     matrix& operator-(const matrix &m2);//重載减法
     matrix& operator*(const matrix &m2);//重载乘法
@@ -15,10 +15,10 @@ public:
     matrix transpose();//转置
     matrix inverse();//求逆
     matrix &operator=(const matrix &m2); // 重载=
-    int det();//求行列式
+    double det();//求行列式
     int getm();
     int getn();
-    int operator()(int i,int j);//访问元素
+    double operator()(int i,int j);//访问元素
     ~matrix() {};
 };
 int matrix::getm(){
@@ -32,10 +32,10 @@ matrix::matrix(int m, int n)
 {
     this->m = m;
     this->n = n;
-    p = new int *[m];
+    p = new double *[m];
     for (int i = 0; i < m; i++)
     {
-        p[i] = new int[n];
+        p[i] = new double[n];
         for (int j = 0; j < n; j++)
         {
             p[i][j] = 0;
@@ -43,7 +43,7 @@ matrix::matrix(int m, int n)
     }
 } // 构造函数
 // 定义访问元素函数
-int matrix::operator()(int i, int j)
+double matrix::operator()(int i, int j)
 {
     return this->p[i][j];
 }
@@ -58,28 +58,10 @@ int pan(int x)
         return -1;
     }
 }
-void inves(matrix mat){
-    if(mat.getm()!=mat.getn()||mat.det()==0){
-        cout << "error:The matrix is not inverse." << endl;
-        return;
-    }
-    double **inve;
-    inve = new double*[mat.getm()];
-    for (int i = 0;i<mat.getm();i++){
-        inve[i] = new double[mat.getn()];
-    }
-    for (int i = 0;i<mat.getm();i++){
-        for (int j = 0; j < mat.getn();j++){
-            inve[i][j] = double(mat.inverse()(i, j))/double(mat.det());
-            cout<<inve[i][j]<<" ";
-        }
-        cout << endl;
-    }
-}
 // 定义求逆函数
 matrix matrix::inverse()
 {
-    int det=this->det();
+    double det=this->det();
     if (this->det() == 0 || m != n)
     {
         matrix tem(1, 1);
@@ -116,14 +98,14 @@ matrix matrix::inverse()
                         }
                     }
                 }
-                inv.p[t][i] = pan(t) * pan(i) * m2.det();
+                inv.p[t][i] = pan(t) * pan(i) * m2.det()/det;
             }
         }
         return inv.transpose();
     }
 }
 //定义行列式函数
-int matrix::det(){
+double matrix::det(){
     if(m!=n){
         return 2147483647;
     }else{
@@ -148,19 +130,10 @@ int matrix::det(){
         return det;
     }
 }
-//定义print函数
-void matrix::print(){
-    for (int i = 0;i<m;i++){
-        for(int j=0;j<n;j++){
-            cout<<p[i][j]<<" ";
-        }
-        cout<<endl;
-    }
-}
 istream& operator>>(istream &in,matrix &m){
-    m.p = new int *[m.m];
+    m.p = new double *[m.m];
     for (int i = 0; i < m.m;i++){
-        m.p[i] = new int[m.n];
+        m.p[i] = new double[m.n];
     }
     for (int i = 0; i < m.m;i++){
         for (int j = 0; j < m.n;j++){
@@ -168,6 +141,26 @@ istream& operator>>(istream &in,matrix &m){
         }
     }
     return in;
+}
+//定义>>函数
+ostream &operator<<(ostream &out, matrix m)
+{
+    if (m.p[0][0] == 2147483647)
+    {
+        out << "error:the matrix is not a square matrix or the determinant is 0" << endl;
+    }
+    else
+    {
+        for (int i = 0; i <m.m ; i++)
+        {
+            for (int j = 0; j < m.n; j++)
+            {
+                out << m.p[i][j] << " ";
+            }
+            out << endl;
+        }
+    }
+    return out;
 }
 //定义+函数
 matrix& matrix::operator+(const matrix &m2){
@@ -194,9 +187,9 @@ matrix& matrix::operator*(const matrix &m2){
     m3 = *this;
     delete[] this->p;
     n=m2.n;
-    p=new int*[m];
+    p=new double*[m];
     for (int i = 0; i < m;i++){
-        p[i] = new int[n];
+        p[i] = new double[n];
     }
     for (int i = 0; i < m;i++){
         for (int j = 0;j<n;j++){
@@ -226,9 +219,9 @@ matrix& matrix::operator=(const matrix &m2){
         delete []p;
         m=m2.m;
         n=m2.n;
-        p=new int*[m];
+        p=new double*[m];
         for(int i=0;i<m;i++){
-            p[i]=new int[n];
+            p[i]=new double[n];
             for(int j=0;j<n;j++){
                 p[i][j]=m2.p[i][j];
             }
@@ -255,6 +248,6 @@ int main(){
     matrix m(2,2);
     cin>>m;
     cout<<m.det()<<endl;
-    inves(m);
+    cout<<m.inverse()<<endl;
     return 0;
 }
