@@ -1,33 +1,12 @@
-#include <iostream>
+#include "matrix.h"
 using namespace std;
-class matrix{
-private:
-    int m,n;
-    double **p;
-public:
-    matrix(int m,int n);
-    friend istream& operator>>(istream &in,matrix &m);// 重载>>运算符;
-    friend ostream& operator<<(ostream &out,matrix m);//重载<<运算符
-    matrix& operator+(const matrix &m2);//重载加法
-    matrix& operator-(const matrix &m2);//重載减法
-    matrix& operator*(const matrix &m2);//重载乘法
-    matrix &operator*(const int &k);//重载数乘
-    matrix transpose();//转置
-    matrix inverse();//求逆
-    matrix &operator=(const matrix &m2); // 重载=
-    double det();//求行列式
-    int getm();
-    int getn();
-    double operator()(int i,int j);//访问元素
-    ~matrix() {};
-};
 int matrix::getm(){
     return this->m;
 }
 int matrix::getn(){
     return this->n;
 }  
-// 定义矩阵类
+//构造函数
 matrix::matrix(int m, int n)
 {
     this->m = m;
@@ -41,7 +20,40 @@ matrix::matrix(int m, int n)
             p[i][j] = 0;
         }
     }
-} // 构造函数
+} 
+//定义求秩函数
+int matrix::rank(){
+    int rank = 0;
+    for (int i = 0; i < n;i++){
+        int flag = -1;
+        for (int j = rank; j < m;j++){
+            if(p[j][i]!=0){
+                flag = j;
+                break;
+            }
+        }
+            if(flag==-1){
+                continue;
+            }       
+            swap(p[rank],p[flag]);
+            for (int k = rank+1; k < m;k++){
+                double tem = p[k][i]/p[rank][i];
+                for (int l = i; l < n;l++){
+                    p[k][l] = p[k][l] - tem*p[rank][l];
+                }
+            }
+        rank++;
+    }
+    return rank;
+}
+//定义求迹函数
+double matrix::trace(){
+    double tem = 0;
+    for (int i = 0; i < m;i++){
+        tem+=this->p[i][i];
+    }
+    return tem;
+}
 // 定义访问元素函数
 double matrix::operator()(int i, int j)
 {
@@ -244,10 +256,9 @@ matrix matrix::transpose(){
     }
     return m3;
 }
+
 int main(){
-    matrix m(2,2);
-    cin>>m;
-    cout<<m.det()<<endl;
-    cout<<m.inverse()<<endl;
-    return 0;
+    matrix m1(3,4);
+    cin >> m1;
+    cout<<m1.transpose();
 }
