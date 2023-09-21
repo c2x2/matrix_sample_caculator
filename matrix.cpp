@@ -256,9 +256,3 @@ matrix matrix::transpose(){
     }
     return m3;
 }
-
-int main(){
-    matrix m1(3,4);
-    cin >> m1;
-    cout<<m1.transpose();
-}
