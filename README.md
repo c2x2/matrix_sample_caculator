@@ -57,4 +57,4 @@ a.getn();   //get a's columns
 # ADD
 ``I make some corrections.Now,we can use the inverse() to get the inverse of a matrix.The type of elements of matrix is changed into double.The old problems are mostly sovled.And we now can use >> to get the ouput.``
 # Weclome to my first git respository
-``Hope you can get some help from this.and hope you can give me some advice.``s
+``Hope you can get some help from this.and hope you can give me some advice.``
