@@ -1,12 +1,5 @@
 # Introduction
-This is my first git respository.I create a program to calculate some easy matrix.
-There may be many errors and hope my three great borthers can give me some special advice.
-# SOME PROBLEMS
-Because of the initial error,the caculator can only be used on the int number.We can only output the double type when getting the inverse.
-# ADD
-I make some corrections.Now,we can use the inverse() to get the inverse of a matrix.The type of elements of matrix is changed into double.The old problems are mostly sovled.And we now can use >> to get the ouput.
-# Weclome to my first git respository
-Hope you can get some help from this.and hope you can give me some advice.
+## This is my first git respository.I create a program to calculate some easy matrix.
 # Instructions
 ###  **1、Download 'matrix.h' and 'matrix.cpp', then you should create a cpp file in the same floder. There is an example as follow :**
 ```cpp
@@ -57,4 +50,11 @@ a(1,1); //get a's element
 a.getm();   //get a's rows
 a.getn();   //get a's columns
 ```
-### **4、If you have any problems, you can contact me at *dzse6297@gmail.com*. Thanks.**
+### **4、If you have any problems, you can contact me at *dzse6297@gmail.com*. Thanks.**  
+
+# SOME PROBLEMS
+`Because of the initial error,the caculator can only be used on the int number.We can only output the double type when getting the inverse.`
+# ADD
+``I make some corrections.Now,we can use the inverse() to get the inverse of a matrix.The type of elements of matrix is changed into double.The old problems are mostly sovled.And we now can use >> to get the ouput.``
+# Weclome to my first git respository
+``Hope you can get some help from this.and hope you can give me some advice.``s
